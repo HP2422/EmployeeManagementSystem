@@ -2,7 +2,7 @@ class EmployeeDirectory extends React.Component {
   constructor() {
     super();
     this.state = {
-      emplyee: []
+      employee: []
     };
     this.a_Employee = this.a_Employee.bind(this);
   }
@@ -10,9 +10,6 @@ class EmployeeDirectory extends React.Component {
     this.loadData();
   }
   async loadData() {
-    // setTimeout(() => {
-    //     this.setState({ emplyee: employeesList });
-    // }, 5000);
     const query = `query {
             employeeList {
                 id,
@@ -23,7 +20,7 @@ class EmployeeDirectory extends React.Component {
                 title,
                 department,
                 employeeType,
-                eStatus
+                currentStatus
             }
             }`;
     const response = await fetch('/graphql', {
@@ -36,16 +33,12 @@ class EmployeeDirectory extends React.Component {
       })
     });
     const result = await response.json();
-    // console.log({ result });
     this.setState({
-      emplyee: result.data.employeeList
+      employee: result.data.employeeList
     });
   }
   async a_Employee(employee) {
-    // const new_emp = this.state.emplyee.slice();
-    // new_emp.push(emp);
-    // this.setState({ emplyee: new_emp });
-    // console.log('Creating Emplyee !!');
+    // console.log('Creating employee !!');
     const query = `mutation emplyeeAdd($employee: EmployeeInputs!) {
             emplyeeAdd(employee: $employee) {
               firstName
@@ -72,17 +65,21 @@ class EmployeeDirectory extends React.Component {
   }
   render() {
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h3", null, "Employee Directory is Called."), /*#__PURE__*/React.createElement(EmployeeSearch, null), /*#__PURE__*/React.createElement(EmployeeTable, {
-      employees: this.state.emplyee
+      employees: this.state.employee
     }), /*#__PURE__*/React.createElement(EmployeeCreate, {
       a_Employee: this.a_Employee
     }));
   }
 }
 class EmployeeCreate extends React.Component {
-  addEmployee = e => {
+  constructor() {
+    super();
+    this.handleAddEmployee = this.handleAddEmployee.bind(this);
+  }
+  handleAddEmployee(e) {
     console.log('Adding Employes');
     e.preventDefault();
-    const form = document.forms.emplyeeAdd;
+    const form = document.forms.addEmployeeForm;
     const employee = {
       firstName: form.firstName.value,
       lastName: form.lastName.value,
@@ -91,7 +88,7 @@ class EmployeeCreate extends React.Component {
       title: form.title.value,
       department: form.department.value,
       employeeType: form.employeeType.value,
-      eStatus: 1
+      currentStatus: 1
     };
     this.props.a_Employee(employee);
     form.firstName.value = "";
@@ -101,7 +98,7 @@ class EmployeeCreate extends React.Component {
     form.title.vlaue = "";
     form.department.vlaue = "";
     form.employeeType.vlaue = "";
-  };
+  }
   render() {
     return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("link", {
       rel: "stylesheet",
@@ -109,8 +106,8 @@ class EmployeeCreate extends React.Component {
       integrity: "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
       crossOrigin: "anonymous"
     }), /*#__PURE__*/React.createElement("form", {
-      name: "emplyeeAdd",
-      onSubmit: this.addEmployee
+      name: "addEmployeeForm",
+      onSubmit: this.handleAddEmployee
     }, /*#__PURE__*/React.createElement("h3", null, "Employee Add is Called."), /*#__PURE__*/React.createElement("div", {
       className: "row"
     }, /*#__PURE__*/React.createElement("div", {
@@ -231,8 +228,8 @@ class EmployeeCreate extends React.Component {
     }, "Seasonal"))), /*#__PURE__*/React.createElement("input", {
       hidden: true,
       type: "number",
-      id: "eStatus",
-      name: "eStatus",
+      id: "currentStatus",
+      name: "currentStatus",
       readOnly: true,
       value: "1"
     })), /*#__PURE__*/React.createElement("div", {
@@ -245,7 +242,7 @@ class EmployeeCreate extends React.Component {
 }
 class EmployeeRow extends React.Component {
   render() {
-    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", null, this.props.employee.firstName), /*#__PURE__*/React.createElement("td", null, this.props.employee.lastName), /*#__PURE__*/React.createElement("td", null, this.props.employee.age), /*#__PURE__*/React.createElement("td", null, this.props.employee.dateOfJoining), /*#__PURE__*/React.createElement("td", null, this.props.employee.title), /*#__PURE__*/React.createElement("td", null, this.props.employee.department), /*#__PURE__*/React.createElement("td", null, this.props.employee.employeeType), /*#__PURE__*/React.createElement("td", null, this.props.employee.eStatus));
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", null, this.props.employee.firstName), /*#__PURE__*/React.createElement("td", null, this.props.employee.lastName), /*#__PURE__*/React.createElement("td", null, this.props.employee.age), /*#__PURE__*/React.createElement("td", null, this.props.employee.dateOfJoining), /*#__PURE__*/React.createElement("td", null, this.props.employee.title), /*#__PURE__*/React.createElement("td", null, this.props.employee.department), /*#__PURE__*/React.createElement("td", null, this.props.employee.employeeType), /*#__PURE__*/React.createElement("td", null, this.props.employee.currentStatus));
   }
 }
 class EmployeeTable extends React.Component {

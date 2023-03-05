@@ -1,0 +1,31 @@
+type Employee {
+    id: String
+    firstName: String!
+    lastName: String!
+    age: String!
+    dateOfJoining: String
+    title: String!
+    department:String
+    employeeType:String!
+    currentStatus:Int
+}
+
+input EmployeeInputs{
+    id: String
+    firstName: String!
+    lastName: String!
+    age: String!
+    dateOfJoining: String
+    title: String!
+    department:String
+    employeeType:String!
+    currentStatus:Int
+}
+
+##### Top Level declarations
+type Query {
+    employeeList: [Employee!]!
+}
+type Mutation {
+    emplyeeAdd(employee: EmployeeInputs!): Employee
+}

@@ -5,10 +5,10 @@ const EmployeeSchema = new mongoose.Schema({
     lastName: String,
     age: String,
     dateOfJoining: String,
-    department:String,
-    employeeType: String,
     title: String,
-    eStatus: String,
+    department: String,
+    employeeType: String,
+    currentStatus: String,
 });
 const Employee = mongoose.model("employeeSchema", EmployeeSchema);
 module.exports = { Employee }

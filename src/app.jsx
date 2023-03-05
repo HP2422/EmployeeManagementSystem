@@ -1,17 +1,16 @@
-
 class EmployeeDirectory extends React.Component {
+
     constructor() {
         super();
-        this.state = { emplyee: [] };
+        this.state = { employee: [] };
         this.a_Employee = this.a_Employee.bind(this);
     }
+
     componentDidMount() {
         this.loadData();
     }
+
     async loadData() {
-        // setTimeout(() => {
-        //     this.setState({ emplyee: employeesList });
-        // }, 5000);
         const query = `query {
             employeeList {
                 id,
@@ -22,7 +21,7 @@ class EmployeeDirectory extends React.Component {
                 title,
                 department,
                 employeeType,
-                eStatus
+                currentStatus
             }
             }`;
         const response = await fetch('/graphql', {
@@ -31,15 +30,11 @@ class EmployeeDirectory extends React.Component {
             body: JSON.stringify({ query })
         });
         const result = await response.json();
-        // console.log({ result });
-        this.setState({ emplyee: result.data.employeeList });
-
+        this.setState({ employee: result.data.employeeList });
     }
+
     async a_Employee(employee) {
-        // const new_emp = this.state.emplyee.slice();
-        // new_emp.push(emp);
-        // this.setState({ emplyee: new_emp });
-        // console.log('Creating Emplyee !!');
+        // console.log('Creating employee !!');
         const query = `mutation emplyeeAdd($employee: EmployeeInputs!) {
             emplyeeAdd(employee: $employee) {
               firstName
@@ -59,27 +54,30 @@ class EmployeeDirectory extends React.Component {
     }
     render() {
         return (
-            <>
+            <React.Fragment>
                 <h3>Employee Directory is Called.</h3>
                 <EmployeeSearch />
-                <EmployeeTable employees={this.state.emplyee} />
+                <EmployeeTable employees={this.state.employee} />
                 <EmployeeCreate a_Employee={this.a_Employee} />
-            </>
+            </React.Fragment>
         );
     }
 }
 
 class EmployeeCreate extends React.Component {
-    addEmployee = (e) => {
+    constructor() {
+        super();
+        this.handleAddEmployee = this.handleAddEmployee.bind(this);
+    }
+    handleAddEmployee(e) {
         console.log('Adding Employes');
         e.preventDefault();
-        const form = document.forms.emplyeeAdd;
-        
+        const form = document.forms.addEmployeeForm;
         const employee = {
             firstName: form.firstName.value, lastName: form.lastName.value,
             age: form.age.value, dateOfJoining: form.dateOfJoining.value,
             title: form.title.value, department: form.department.value,
-            employeeType: form.employeeType.value, eStatus: 1
+            employeeType: form.employeeType.value, currentStatus: 1
         };
         this.props.a_Employee(employee);
         form.firstName.value = "";
@@ -94,7 +92,7 @@ class EmployeeCreate extends React.Component {
         return (
             <div>
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossOrigin="anonymous"></link>
-                <form name="emplyeeAdd" onSubmit={this.addEmployee}>
+                <form name="addEmployeeForm" onSubmit={this.handleAddEmployee}>
                     <h3>Employee Add is Called.</h3>
                     <div className="row">
                         <div className="col-md-6">
@@ -159,7 +157,7 @@ class EmployeeCreate extends React.Component {
                                 <option value="Seasonal">Seasonal</option>
                             </select>
                         </div>
-                        <input hidden type="number" id="eStatus" name="eStatus" readOnly value="1" />
+                        <input hidden type="number" id="currentStatus" name="currentStatus" readOnly value="1" />
                     </div>
 
                     <div className="text-center">
@@ -183,7 +181,7 @@ class EmployeeRow extends React.Component {
                 <td>{this.props.employee.title}</td>
                 <td>{this.props.employee.department}</td>
                 <td>{this.props.employee.employeeType}</td>
-                <td>{this.props.employee.eStatus}</td>
+                <td>{this.props.employee.currentStatus}</td>
             </tr>
         )
     }
@@ -191,7 +189,7 @@ class EmployeeRow extends React.Component {
 
 class EmployeeTable extends React.Component {
     render() {
-        const allRows = this.props.employees.map(employee => <EmployeeRow key={employee.id} employee={employee}/>);
+        const allRows = this.props.employees.map(employee => <EmployeeRow key={employee.id} employee={employee} />);
         return (
             <React.Fragment>
                 <h3>Employee Table is Called.</h3>
