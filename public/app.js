@@ -49,7 +49,7 @@ class EmployeeDirectory extends React.Component {
               employeeType
             }
           }`;
-    const response = await fetch('/graphql', {
+    let response = await fetch('/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -61,7 +61,13 @@ class EmployeeDirectory extends React.Component {
         }
       })
     });
-    this.loadData();
+    console.log(response);
+    let result = await response.json();
+    if (result.errors[0].extensions.code === "BAD_USER_INPUT") {
+      alert("Incorrect Data : " + result.errors[0].extensions.errors.join("\n"));
+    } else {
+      await this.loadData();
+    }
   }
   render() {
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h3", null, "Employee Directory is Called."), /*#__PURE__*/React.createElement(EmployeeSearch, null), /*#__PURE__*/React.createElement(EmployeeTable, {
@@ -142,7 +148,7 @@ class EmployeeCreate extends React.Component {
       htmlFor: "age",
       className: "form-label"
     }, "Age"), " :-", /*#__PURE__*/React.createElement("input", {
-      type: "text",
+      type: "number",
       className: "form-control",
       id: "age",
       name: "age",
@@ -174,8 +180,6 @@ class EmployeeCreate extends React.Component {
       placeholder: "Title",
       required: true
     }, /*#__PURE__*/React.createElement("option", {
-      value: ""
-    }, "Select Title Type"), /*#__PURE__*/React.createElement("option", {
       value: "Employee"
     }, "Employee"), /*#__PURE__*/React.createElement("option", {
       value: "Manager"
@@ -194,8 +198,6 @@ class EmployeeCreate extends React.Component {
       name: "department",
       required: true
     }, /*#__PURE__*/React.createElement("option", {
-      value: ""
-    }, "Select Department Type"), /*#__PURE__*/React.createElement("option", {
       value: "It"
     }, "Information and technology"), /*#__PURE__*/React.createElement("option", {
       value: "Marketing"
@@ -216,8 +218,6 @@ class EmployeeCreate extends React.Component {
       name: "employeeType",
       required: true
     }, /*#__PURE__*/React.createElement("option", {
-      value: ""
-    }, "Select Employee Type"), /*#__PURE__*/React.createElement("option", {
       value: "Full-Time"
     }, "Full Time"), /*#__PURE__*/React.createElement("option", {
       value: "Part-Time"
@@ -242,13 +242,14 @@ class EmployeeCreate extends React.Component {
 }
 class EmployeeRow extends React.Component {
   render() {
-    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null), /*#__PURE__*/React.createElement("td", null, this.props.employee.firstName), /*#__PURE__*/React.createElement("td", null, this.props.employee.lastName), /*#__PURE__*/React.createElement("td", null, this.props.employee.age), /*#__PURE__*/React.createElement("td", null, this.props.employee.dateOfJoining), /*#__PURE__*/React.createElement("td", null, this.props.employee.title), /*#__PURE__*/React.createElement("td", null, this.props.employee.department), /*#__PURE__*/React.createElement("td", null, this.props.employee.employeeType), /*#__PURE__*/React.createElement("td", null, this.props.employee.currentStatus));
+    return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, this.props.index + 1), /*#__PURE__*/React.createElement("td", null, this.props.employee.firstName), /*#__PURE__*/React.createElement("td", null, this.props.employee.lastName), /*#__PURE__*/React.createElement("td", null, this.props.employee.age), /*#__PURE__*/React.createElement("td", null, this.props.employee.dateOfJoining), /*#__PURE__*/React.createElement("td", null, this.props.employee.title), /*#__PURE__*/React.createElement("td", null, this.props.employee.department), /*#__PURE__*/React.createElement("td", null, this.props.employee.employeeType), /*#__PURE__*/React.createElement("td", null, this.props.employee.currentStatus == 1 ? "Working" : "Retired"));
   }
 }
 class EmployeeTable extends React.Component {
   render() {
-    const allRows = this.props.employees.map(employee => /*#__PURE__*/React.createElement(EmployeeRow, {
+    const allRows = this.props.employees.map((employee, index) => /*#__PURE__*/React.createElement(EmployeeRow, {
       key: employee.id,
+      index: index,
       employee: employee
     }));
     return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h3", null, "Employee Table is Called."), /*#__PURE__*/React.createElement("h5", {

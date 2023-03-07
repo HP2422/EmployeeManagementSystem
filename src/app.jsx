@@ -45,12 +45,19 @@ class EmployeeDirectory extends React.Component {
               employeeType
             }
           }`;
-        const response = await fetch('/graphql', {
+        let response = await fetch('/graphql', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query, variables: { employee } })
         });
-        this.loadData();
+        console.log(response);
+        let result = await response.json();
+        if (result.errors[0].extensions.code === "BAD_USER_INPUT") {
+            alert("Incorrect Data : " + result.errors[0].extensions.errors.join("\n"));
+        }
+        else {
+            await this.loadData();
+        }
     }
     render() {
         return (
@@ -109,7 +116,7 @@ class EmployeeCreate extends React.Component {
                     <div className="row">
                         <div className="col-md-6">
                             <label htmlFor="age" className="form-label">Age</label> :-
-                            <input type="text" className="form-control" id="age" name="age" placeholder="Age" required />
+                            <input type="number" className="form-control" id="age" name="age" placeholder="Age" required />
                         </div>
                         <br />
                         <div className="col-md-6">
@@ -124,7 +131,6 @@ class EmployeeCreate extends React.Component {
                             <br />
                             <label htmlFor="title" className="form-label">Title</label> :-
                             <select className="form-select" id="title" name="title" placeholder="Title" required>
-                                <option value="">Select Title Type</option>
                                 <option value="Employee">Employee</option>
                                 <option value="Manager">Manager</option>
                                 <option value="Director">Director</option>
@@ -136,7 +142,6 @@ class EmployeeCreate extends React.Component {
                             <br />
                             <label htmlFor="department" className="form-label">Department</label> :-
                             <select className="form-select" id="department" name="department" required>
-                                <option value="">Select Department Type</option>
                                 <option value="It">Information and technology</option>
                                 <option value="Marketing">Marketing</option>
                                 <option value="Hr">HR</option>
@@ -150,7 +155,6 @@ class EmployeeCreate extends React.Component {
                         <div className="col-md-6">
                             <label htmlFor="employeeType" className="form-label">Employee Type</label> :-
                             <select className="form-select" id="employeeType" name="employeeType" required>
-                                <option value="">Select Employee Type</option>
                                 <option value="Full-Time">Full Time</option>
                                 <option value="Part-Time">Part Time</option>
                                 <option value="Contract Base">Contract Base</option>
@@ -173,7 +177,7 @@ class EmployeeRow extends React.Component {
     render() {
         return (
             <tr >
-                <td></td>
+                <td>{this.props.index + 1}</td>
                 <td>{this.props.employee.firstName}</td>
                 <td>{this.props.employee.lastName}</td>
                 <td>{this.props.employee.age}</td>
@@ -181,7 +185,7 @@ class EmployeeRow extends React.Component {
                 <td>{this.props.employee.title}</td>
                 <td>{this.props.employee.department}</td>
                 <td>{this.props.employee.employeeType}</td>
-                <td>{this.props.employee.currentStatus}</td>
+                <td>{this.props.employee.currentStatus == 1 ? "Working" : "Retired"}</td>
             </tr>
         )
     }
@@ -189,7 +193,9 @@ class EmployeeRow extends React.Component {
 
 class EmployeeTable extends React.Component {
     render() {
-        const allRows = this.props.employees.map(employee => <EmployeeRow key={employee.id} employee={employee} />);
+        const allRows = this.props.employees.map((employee, index) => (
+            <EmployeeRow key={employee.id} index={index} employee={employee} />
+        ));
         return (
             <React.Fragment>
                 <h3>Employee Table is Called.</h3>

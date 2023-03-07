@@ -1,10 +1,11 @@
 const express = require('express');
 const { buildSchema } = require("graphql");
+const fs = require("fs");
 const { GraphQLScalarType } = require('graphql');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { connectDB } = require('./db.js');
 const { Employee } = require("./model/employee")
-const fs = require("fs");
+
 const app = express();
 
 connectDB();
@@ -15,14 +16,20 @@ const getEmployees = async () => {
 };
 
 const addEmployees = async (parent, args, context, info) => {
-    console.log({ args });
+    console.log(args.employee);
+
+    const newEmployeeDetails = args.employee;
+
+    checkEmployeeValidation(newEmployeeDetails);
+
     const {
         firstName,
         lastName,
         age,
         dateOfJoining,
-        employeeType,
         title,
+        department,
+        employeeType,
         currentStatus,
     } = args.employee;
     const employee = Employee({
@@ -30,12 +37,37 @@ const addEmployees = async (parent, args, context, info) => {
         lastName,
         age,
         dateOfJoining,
-        employeeType,
         title,
+        department,
+        employeeType,
         currentStatus: 1,
     });
+
     await employee.save();
     return employee;
+}
+
+function checkEmployeeValidation(newEmployee) {
+    const errors = [];
+    if (newEmployee.firstName.length < 2) {
+        errors.push('You must have to enter the first name of Employee properly!! ');
+    }
+
+    if (newEmployee.lastName.length < 2) {
+        errors.push('You must have to enter the last name of Employee properly!! ');
+    }
+
+    if (isNaN(newEmployee.age)) {
+        errors.push('You must have to enter the age of Employee!! ');
+    };
+
+    if (newEmployee.age < 20 || newEmployee.age > 70) {
+        errors.push('Employee is eligable to work only if their age is between 20 years and 70 years!! ')
+    }
+    console.log(errors);
+    if (errors.length > 0) {
+        throw new UserInputError('Invalid inputs enterd !! ', { errors })
+    }
 }
 
 const resolvers = {
@@ -56,6 +88,12 @@ app.listen(3000, function () {
 const server = new ApolloServer({
     typeDefs: fs.readFileSync('./public/schema.graphql').toString(),
     resolvers,
+    formatError: error => {
+        console.log("User Input errors");
+        console.log(error);
+        console.log("User Input errors");
+        return error;
+    }
 });
 
 server.start().then(res => {

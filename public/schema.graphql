@@ -1,3 +1,5 @@
+scalar GraphQLDate
+
 type Employee {
     id: String
     firstName: String!
