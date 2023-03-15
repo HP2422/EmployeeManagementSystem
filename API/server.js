@@ -10,6 +10,15 @@ const app = express();
 
 connectDB();
 
+const GraphQLDate = new GraphQLScalarType({
+    name: 'GraphQLDate',
+    description: 'A Date() type in GraphQL as a scalar',
+    parseValue(dateOfJoining) {
+        let dateValue = new Date(dateOfJoining);
+        return dateValue;
+    },
+});
+
 const getEmployees = async () => {
     const emListFromDb = await Employee.find();
     return emListFromDb;
@@ -21,7 +30,7 @@ const addEmployees = async (parent, args, context, info) => {
     const newEmployeeDetails = args.employee;
 
     checkEmployeeValidation(newEmployeeDetails);
-
+    newEmployeeDetails.dateOfJoining = new Date();
     const {
         firstName,
         lastName,
@@ -76,17 +85,14 @@ const resolvers = {
     },
     Mutation: {
         emplyeeAdd: addEmployees
-    }
+    },
+    GraphQLDate,
 };
 
-app.use(express.static('public'));
 
-app.listen(3000, function () {
-    console.log('App started on port 3000');
-});
 
 const server = new ApolloServer({
-    typeDefs: fs.readFileSync('./public/schema.graphql').toString(),
+    typeDefs: fs.readFileSync('./schema.graphql').toString(),
     resolvers,
     formatError: error => {
         console.log("User Input errors");
@@ -98,5 +104,5 @@ const server = new ApolloServer({
 
 server.start().then(res => {
     server.applyMiddleware({ app, path: '/graphql' });
-    app.listen({ port: 4001 }, () => console.log('Now browse to http://localhost:4001' + server.graphqlPath))
+    app.listen({ port: 3000 }, () => console.log('Now browse API to http://localhost:3000' + server.graphqlPath))
 })

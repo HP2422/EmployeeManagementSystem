@@ -82,7 +82,8 @@ class EmployeeCreate extends React.Component {
         const form = document.forms.addEmployeeForm;
         const employee = {
             firstName: form.firstName.value, lastName: form.lastName.value,
-            age: form.age.value, dateOfJoining: form.dateOfJoining.value,
+            age: form.age.value,
+            // dateOfJoining: form.dateOfJoining.value,
             title: form.title.value, department: form.department.value,
             employeeType: form.employeeType.value, currentStatus: 1
         };
@@ -119,10 +120,10 @@ class EmployeeCreate extends React.Component {
                             <input type="number" className="form-control" id="age" name="age" placeholder="Age" required />
                         </div>
                         <br />
-                        <div className="col-md-6">
+                        {/* <div className="col-md-6">
                             <label htmlFor="dateOfJoining" className="form-label">Date of Joining</label> :-
                             <input type="date" className="form-control" id="dateOfJoining" name="dateOfJoining" placeholder="Date Of Joining" required />
-                        </div>
+                        </div> */}
                         <br />
                         <br />
                     </div>

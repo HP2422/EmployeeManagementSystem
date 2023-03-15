@@ -23,7 +23,7 @@ class EmployeeDirectory extends React.Component {
                 currentStatus
             }
             }`;
-    const response = await fetch('/graphql', {
+    const response = await fetch('http://localhost:3000/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ class EmployeeDirectory extends React.Component {
               employeeType
             }
           }`;
-    let response = await fetch('/graphql', {
+    let response = await fetch('http://localhost:3000/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ class EmployeeCreate extends React.Component {
       firstName: form.firstName.value,
       lastName: form.lastName.value,
       age: form.age.value,
-      dateOfJoining: form.dateOfJoining.value,
+      // dateOfJoining: form.dateOfJoining.value,
       title: form.title.value,
       department: form.department.value,
       employeeType: form.employeeType.value,
@@ -154,19 +154,7 @@ class EmployeeCreate extends React.Component {
       name: "age",
       placeholder: "Age",
       required: true
-    })), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", {
-      className: "col-md-6"
-    }, /*#__PURE__*/React.createElement("label", {
-      htmlFor: "dateOfJoining",
-      className: "form-label"
-    }, "Date of Joining"), " :-", /*#__PURE__*/React.createElement("input", {
-      type: "date",
-      className: "form-control",
-      id: "dateOfJoining",
-      name: "dateOfJoining",
-      placeholder: "Date Of Joining",
-      required: true
-    })), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("br", null)), /*#__PURE__*/React.createElement("div", {
+    })), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("br", null)), /*#__PURE__*/React.createElement("div", {
       className: "row"
     }, /*#__PURE__*/React.createElement("div", {
       className: "col-md-6"
