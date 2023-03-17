@@ -4,7 +4,11 @@ const fs = require("fs");
 const { GraphQLScalarType } = require('graphql');
 const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { connectDB } = require('./db.js');
-const { Employee } = require("./model/employee")
+const { Employee } = require("./model/employee");
+require('dotenv').config();
+
+const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';
+console.log('CORS setting:', enableCors);
 
 const app = express();
 
@@ -102,7 +106,9 @@ const server = new ApolloServer({
     }
 });
 
+const port = process.env.API_SERVER_PORT || 3000;
+
 server.start().then(res => {
     server.applyMiddleware({ app, path: '/graphql' });
-    app.listen({ port: 3000 }, () => console.log('Now browse API to http://localhost:3000' + server.graphqlPath))
+    app.listen(port, () => console.log('Now browse API to http://localhost:3000' + server.graphqlPath))
 })

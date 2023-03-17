@@ -6,13 +6,14 @@
   "scripts": {
     "compile": "babel src --out-dir public --presets @babel/react",
     "watch": "babel src --out-dir public --watch --verbose --presets @babel/react",
-    "start": "nodemon app.js",
+    "start": "nodemon app.js,graphql -w . -w .env server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "HARSH",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^3.11.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "graphql": "^15.8.0",
     "nodemon": "^2.0.20",

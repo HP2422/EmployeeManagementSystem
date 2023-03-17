@@ -24,7 +24,7 @@ class EmployeeDirectory extends React.Component {
                 currentStatus
             }
             }`;
-        const response = await fetch('/graphql', {
+        const response = await fetch('window.ENV.UI_API_ENDPOINT', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query })
@@ -45,7 +45,7 @@ class EmployeeDirectory extends React.Component {
               employeeType
             }
           }`;
-        let response = await fetch('/graphql', {
+        let response = await fetch('window.ENV.UI_API_ENDPOINT', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query, variables: { employee } })

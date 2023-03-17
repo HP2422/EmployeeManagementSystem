@@ -23,7 +23,7 @@ class EmployeeDirectory extends React.Component {
                 currentStatus
             }
             }`;
-    const response = await fetch('http://localhost:3000/graphql', {
+    const response = await fetch(window.ENV.UI_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ class EmployeeDirectory extends React.Component {
               employeeType
             }
           }`;
-    let response = await fetch('http://localhost:3000/graphql', {
+    let response = await fetch(window.ENV.UI_API_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
