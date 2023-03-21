@@ -1,14 +1,25 @@
+require('dotenv').config();
 const express = require('express');
+
+const mongoose = require("mongoose");
 const { buildSchema } = require("graphql");
 const fs = require("fs");
 const { GraphQLScalarType } = require('graphql');
 const { ApolloServer, UserInputError } = require('apollo-server-express');
-const { connectDB } = require('./db.js');
-const { Employee } = require("./model/employee");
-require('dotenv').config();
 
-const enableCors = (process.env.ENABLE_CORS || 'true') == 'true';
-console.log('CORS setting:', enableCors);
+const { Employee } = require("./model/employee")
+const url = process.env.MONGO_URL || 'mongodb+srv://admin:admin@cluster0.oz6xckg.mongodb.net/?retryWrites=true&w=majority';
+
+const connectDB = async () => {
+    try {
+        const con = await mongoose.connect(url, { useNewUrlParser: true });
+        console.log(`MongoDb Database is Connected ${con.connection.host}`);
+    } catch (err) {
+        console.log(err);
+        process.exit(1);
+    }
+};
+
 
 const app = express();
 
@@ -110,5 +121,5 @@ const port = process.env.API_SERVER_PORT || 3000;
 
 server.start().then(res => {
     server.applyMiddleware({ app, path: '/graphql' });
-    app.listen(port, () => console.log('Now browse API to http://localhost:3000' + server.graphqlPath))
+    app.listen(port, () => console.log(`Now browse API to http://localhost:${port}` + server.graphqlPath))
 })
