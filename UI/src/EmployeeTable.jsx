@@ -22,6 +22,7 @@ export default class EmployeeTable extends React.Component {
                             <th>Department</th>
                             <th>Emplyee Type</th>
                             <th>Current Status</th>
+                            <th>Operations</th>
                         </tr>
                     </thead>
                     <tbody>

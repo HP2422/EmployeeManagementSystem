@@ -1,0 +1,13 @@
+.edit-button,
+.delete-button {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+}

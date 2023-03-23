@@ -13,6 +13,9 @@ export default class EmployeeRow extends React.Component {
                 <td>{this.props.employee.department}</td>
                 <td>{this.props.employee.employeeType}</td>
                 <td>{this.props.employee.currentStatus == 1 ? "Working" : "Retired"}</td>
+                <td><a href={`/#/employeeEdit/${this.props.employee.id}`}>Edit</a></td>
+                {/* <td><button className='edit-button'><a href={`/#/edit/${this.props.employee.id}`}>Edit</a>Edit</button> ||
+                    <button className='delete-button'>Delete</button></td> */}
             </tr>
         )
     }
