@@ -18,6 +18,8 @@ export default async function graphqlFetch(query, variables = {}) {
 
     const body = await response.text();
     const result = JSON.parse(body, jsonDateReviver);
+    console.log(result);
+    console.log("result");
     if (result.errors) {
       const error = result.errors[0];
       if (error.extensions.code === "BAD_USER_INPUT") {

@@ -18,22 +18,24 @@ export default class EmployeeDirectory extends React.Component {
     }
 
     async loadData() {
-        const query = `query {
-                firstName,
-                lastName,
-                age,
-                dateOfJoining,
-                title,
-                department,
-                employeeType,
-                currentStatus
+        const query = `query EmployeeList {
+            employeeList {
+              id
+              firstName
+              lastName
+              age
+              dateOfJoining
+              title
+              department
+              employeeType
+              currentStatus
             }
-            }`;
+          }`;
 
 
-        const response = await graphQLFetch(query, { employee });
-        const result = await response.json();
-        this.setState({ employee: result.data.employeeList });
+        const employee = this.state.employee
+        const response = await graphQLFetch(query);
+        this.setState({ employee: response.employeeList });
     }
 
     async a_Employee(employee) {
