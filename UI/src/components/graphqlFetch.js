@@ -8,7 +8,6 @@ function jsonDateReviver(key, value) {
 }
 
 export default async function graphqlFetch(query, variables = {}) {
-  console.log(query, variables);
   try {
     const response = await fetch("http://localhost:3000/graphql", {
       method: "POST",
@@ -18,8 +17,6 @@ export default async function graphqlFetch(query, variables = {}) {
 
     const body = await response.text();
     const result = JSON.parse(body, jsonDateReviver);
-    console.log(result);
-    console.log("result");
     if (result.errors) {
       const error = result.errors[0];
       if (error.extensions.code === "BAD_USER_INPUT") {
@@ -31,6 +28,6 @@ export default async function graphqlFetch(query, variables = {}) {
     }
     return result.data;
   } catch (e) {
-    alert(`Error in sending request to server: ${e.message}`);
+    alert(`Error in sending request to the server: ${e.message}`);
   }
 }

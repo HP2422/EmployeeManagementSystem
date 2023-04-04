@@ -90,7 +90,7 @@ export default class EmployeeCreate extends React.Component {
                             <select className="form-select" id="employeeType" name="employeeType" required>
                                 <option value="Full-Time">Full Time</option>
                                 <option value="Part-Time">Part Time</option>
-                                <option value="Contract Base">Contract Base</option>
+                                <option value="ContractBase">Contract Base</option>
                                 <option value="Seasonal">Seasonal</option>
                             </select>
                         </div>

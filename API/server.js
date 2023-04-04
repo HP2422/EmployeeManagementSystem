@@ -34,10 +34,33 @@ const GraphQLDate = new GraphQLScalarType({
     },
 });
 
-const getEmployees = async () => {
-    const emListFromDb = await Employee.find();
-    return emListFromDb;
-};
+// const getEmployees = async () => {
+//     const emListFromDb = await Employee.find();
+//     return emListFromDb;
+// };
+
+async function getEmployees(parent,args,context,info){
+    if(args.employeeType){
+      const emListFromDb = Employee.find(args)
+      .then(emListFromDb => {
+        return emListFromDb;
+      })
+      .catch(error => {
+        res.json(error)
+      })
+      return emListFromDb;
+    } else {
+      const emListFromDb = Employee.find({})
+      .then(emListFromDb => {
+        return emListFromDb;
+      })
+      .catch(error =>{
+        res.json(error)
+      })
+        return emListFromDb;
+    }
+  }
+
 
 const addEmployees = async (parent, args, context, info) => {
     console.log(args.employee);
@@ -94,12 +117,19 @@ function checkEmployeeValidation(newEmployee) {
     }
 }
 
+
+async function deleteEmployess(parent, args, context, info) {
+    const employee = await Employee.findByIdAndDelete(args.id);
+    return employee;
+  }
+
 const resolvers = {
     Query: {
         employeeList: getEmployees
     },
     Mutation: {
-        emplyeeAdd: addEmployees
+        emplyeeAdd: addEmployees,
+        employeeDelete: deleteEmployess,
     },
     GraphQLDate,
 };
@@ -110,9 +140,7 @@ const server = new ApolloServer({
     typeDefs: fs.readFileSync('./schema.graphql').toString(),
     resolvers,
     formatError: error => {
-        console.log("User Input errors");
         console.log(error);
-        console.log("User Input errors");
         return error;
     }
 });

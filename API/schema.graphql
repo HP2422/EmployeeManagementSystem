@@ -26,8 +26,9 @@ input EmployeeInputs{
 
 ##### Top Level declarations
 type Query {
-    employeeList: [Employee!]!
+    employeeList(employeeType: String): [Employee!]!
 }
 type Mutation {
     emplyeeAdd(employee: EmployeeInputs!): Employee
+    employeeDelete(id: String): Employee
 }
